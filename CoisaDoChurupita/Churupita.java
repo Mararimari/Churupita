@@ -7,7 +7,7 @@ public class Churupita extends AdvancedRobot {
     private String targetName = null;
 
     public void run() {
-        // Cores do Churupita
+        
         setBodyColor(Color.PINK);
         setGunColor(Color.PINK);
         setRadarColor(Color.PINK);
@@ -18,7 +18,6 @@ public class Churupita extends AdvancedRobot {
         setAdjustGunForRobotTurn(true);
 
         while (true) {
-            // Radar girando constantemente
             turnRadarRight(360);
         }
     }
@@ -27,27 +26,27 @@ public class Churupita extends AdvancedRobot {
         enemyDistance = e.getDistance();
         targetName = e.getName();
 
-        // Travar radar no inimigo
+        
         double radarTurn = getHeading() - getRadarHeading() + e.getBearing();
         setTurnRadarRight(normaliseBearing(radarTurn));
 
-        // Precisão de tiro
+        
         double firePower;
-        if (enemyDistance > 400) { // Longa distância
+        if (enemyDistance > 400) { 
             firePower = 1.5;
-            setTurnRight(e.getBearing()); // Menos movimento
+            setTurnRight(e.getBearing()); 
             setAhead(50);
-        } else { // Curta distância
+        } else { 
             firePower = 3;
-            setTurnRight(e.getBearing() + 90); // Movimento evasivo
+            setTurnRight(e.getBearing() + 90); 
             setAhead(150);
         }
 
-        // Mira no inimigo
+        
         double turnGunAmt = normaliseBearing(e.getBearing() + getHeading() - getGunHeading());
         setTurnGunRight(turnGunAmt);
 
-        // Atirar sempre que possível
+        
         if (getGunHeat() == 0 && getEnergy() > 0.5) {
             fire(firePower);
         }
@@ -57,14 +56,21 @@ public class Churupita extends AdvancedRobot {
         targetName = e.getName();
         double turnGunAmt = normaliseBearing(e.getBearing() + getHeading() - getGunHeading());
         setTurnGunRight(turnGunAmt);
-        fire(3); // Tiro forte a curta distância
+        fire(3); 
         back(50);
     }
 
-    // Função para normalizar ângulo
+    
     private double normaliseBearing(double angle) {
         while (angle > 180) angle -= 360;
         while (angle < -180) angle += 360;
         return angle;
+    }
+	
+	public void onWin(WinEvent e) {
+        for (int i = 0; i < 50; i++) {
+            turnRight(30);
+            turnLeft(30);
+        }
     }
 }
